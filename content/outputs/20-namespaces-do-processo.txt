@@ -1,0 +1,11 @@
+$ ls -l /proc/self/ns | tail -n +2 | awk "{print \$9, \$10, \$11}"
+cgroup -> cgroup:[4026531835]
+ipc -> ipc:[4026531839]
+mnt -> mnt:[4026531832]
+net -> net:[4026531833]
+pid -> pid:[4026531836]
+pid_for_children -> pid:[4026531836]
+time -> time:[4026531834]
+time_for_children -> time:[4026531834]
+user -> user:[4026531837]
+uts -> uts:[4026531838]

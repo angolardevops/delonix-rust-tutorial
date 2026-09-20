@@ -6,6 +6,7 @@
 use std::io;
 use std::path::PathBuf;
 
+// region: error
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug, thiserror::Error)]
@@ -77,3 +78,4 @@ impl<T> IoContext<T> for std::result::Result<T, io::Error> {
         self.map_err(|e| Error::io(context(), e))
     }
 }
+// endregion

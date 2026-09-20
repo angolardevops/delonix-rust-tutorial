@@ -18,6 +18,7 @@ pub struct Cgroup {
     path: PathBuf,
 }
 
+// region: limits
 /// Limites já traduzidos para os ficheiros do cgroup v2 (função pura → testável).
 pub fn limit_files(res: &Resources) -> Vec<(&'static str, String)> {
     let mut out = Vec::new();
@@ -35,6 +36,7 @@ pub fn limit_files(res: &Resources) -> Vec<(&'static str, String)> {
     }
     out
 }
+// endregion
 
 fn wanted_controllers(files: &[(&str, String)]) -> Vec<&'static str> {
     let mut c = Vec::new();
@@ -61,6 +63,7 @@ fn own_cgroup() -> Result<PathBuf> {
 }
 
 impl Cgroup {
+    // region: cg-create
     /// `Ok(None)` quando o bundle não pede limites — não se mexe em cgroups sem necessidade.
     pub fn create(id: &str, res: Option<&Resources>) -> Result<Option<Self>> {
         let files = res.map(limit_files).unwrap_or_default();
@@ -101,6 +104,7 @@ impl Cgroup {
         }
         Ok(Some(Self { path: leaf }))
     }
+    // endregion
 
     pub fn attach(&self, pid: i32) -> Result<()> {
         fs::write(self.path.join("cgroup.procs"), pid.to_string())

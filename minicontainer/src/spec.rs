@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::{Error, IoContext, Result};
 
+// region: spec-structs
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Spec {
@@ -101,6 +102,7 @@ pub struct Cpu {
     pub quota: Option<i64>,
     pub period: Option<u64>,
 }
+// endregion
 
 fn root_dir() -> String {
     "/".to_owned()
@@ -119,6 +121,7 @@ impl Spec {
         Ok(spec)
     }
 
+    // region: spec-validate
     /// Fail-closed: recusa o que não sabemos cumprir.
     pub fn validate(&self) -> Result<()> {
         if !self.oci_version.starts_with("1.") {
@@ -155,6 +158,7 @@ impl Spec {
         }
         Ok(())
     }
+    // endregion
 
     /// Caminho absoluto do rootfs (o `root.path` é relativo ao bundle).
     pub fn rootfs(&self, bundle: &Path) -> PathBuf {

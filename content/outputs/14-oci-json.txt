@@ -1,0 +1,50 @@
+$ cat index.json
+{"schemaVersion":2,"manifests":[{"mediaType":"application/vnd.oci.image.manifest.v1+json","digest":"sha256:d16cfcdae88e9d49d389014575e797b12a2e397d91fc9e6d39c859a445802359","size":669}]}
+$ cat blobs/sha256/<manifest>
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.manifest.v1+json",
+  "config": {
+    "mediaType": "application/vnd.oci.image.config.v1+json",
+    "digest": "sha256:e935c9788314377cdd806df3dc256af32fcb7405d50b0f141811521508d9c220",
+    "size": 514
+  },
+  "layers": [
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:c47a79988f17e55f4a5513b1eb9d62dc3d103791bbf253e17f51e7300c017bdb",
+      "size": 1110580
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:a184019c3c14966202cfd39730b5ea811f4de055310e725f0bb61c3d10463091",
+      "size": 213
+    }
+  ]
+}
+$ cat blobs/sha256/<config>
+{
+  "architecture": "amd64",
+  "os": "linux",
+  "config": {
+    "Entrypoint": [
+      "/bin/sh",
+      "-c"
+    ],
+    "Cmd": [
+      "cat /etc/motd; ls /etc; echo cwd=$(pwd) MSG=$MSG"
+    ],
+    "Env": [
+      "PATH=/bin",
+      "MSG=ola-da-imagem"
+    ],
+    "WorkingDir": "/tmp"
+  },
+  "rootfs": {
+    "type": "layers",
+    "diff_ids": [
+      "sha256:ad097e57710b778cc4773d479965b38f95e387d90bdbc9633ee37bcf874680d8",
+      "sha256:13cb15d282896b8ae63864034dc1c56ad3357cc73f0ceb1be0387d9649fb79c6"
+    ]
+  }
+}

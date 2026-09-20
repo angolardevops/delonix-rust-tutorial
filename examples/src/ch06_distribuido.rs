@@ -12,6 +12,7 @@ use std::time::Duration;
 // `plan` recebe os três lados já lidos e devolve o que mudar. Nunca toca no sistema.
 // É por isso que os casos difíceis se testam como dados, em microssegundos.
 
+// region: plan
 pub type Fields = BTreeMap<String, String>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -53,9 +54,11 @@ pub fn plan(desired: &Fields, actual: Option<&Fields>, last_applied: Option<&Fie
 pub fn should_prune(owner: Option<&str>, stack: &str) -> bool {
     owner == Some(stack)
 }
+// endregion
 
 // ─── 2. Idempotência: aplicar duas vezes = aplicar uma ──────────────────────────────────────
 
+// region: apply
 #[derive(Debug, Default)]
 pub struct Machine {
     pub resources: BTreeMap<String, Fields>,
@@ -79,9 +82,11 @@ pub fn apply(m: &mut Machine, name: &str, desired: &Fields) {
         Action::Delete | Action::NoOp => {}
     }
 }
+// endregion
 
 // ─── 3. Retentativas com backoff exponencial e tecto ────────────────────────────────────────
 
+// region: backoff
 /// 1s, 2s, 4s, 8s … até ao tecto. Sem tecto, uma falha longa dorme horas; sem *jitter*
 /// (não incluído aqui por ser determinístico nos testes) uma frota inteira retenta em uníssono.
 pub fn backoff(attempt: u32, base: Duration, cap: Duration) -> Duration {
@@ -93,9 +98,11 @@ pub fn backoff(attempt: u32, base: Duration, cap: Duration) -> Duration {
 pub fn is_retryable(http_status: u16) -> bool {
     matches!(http_status, 408 | 429 | 500 | 502 | 503 | 504)
 }
+// endregion
 
 // ─── 4. Retomar um download: o servidor responde a OUTRA pergunta? ──────────────────────────
 
+// region: range
 /// Valida um `Content-Range: bytes <inicio>-<fim>/<total>` contra o offset que pedimos.
 /// Um 206 noutro offset «responde a outra pergunta»: colar duplicaria o prefixo e a corrupção
 /// só apareceria no digest, depois de pagar o download inteiro.
@@ -105,9 +112,11 @@ pub fn parse_content_range(h: &str, expected_start: u64) -> Option<u64> {
     let (start, _end) = range.split_once('-')?;
     (start.parse::<u64>().ok()? == expected_start).then(|| total.parse().ok())?
 }
+// endregion
 
 // ─── 5. Estado em disco sem corridas: escrita atómica + flock ───────────────────────────────
 
+// region: atomic
 /// Escrever num ficheiro temporário e fazer `rename`: um leitor vê o antigo inteiro
 /// ou o novo inteiro, nunca metade. A ORDEM importa: `fsync` do conteúdo antes do `rename`.
 pub fn write_atomic(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
@@ -122,9 +131,11 @@ pub fn write_atomic(path: &Path, bytes: &[u8]) -> std::io::Result<()> {
     f.sync_all()?;
     fs::rename(&tmp, path)
 }
+// endregion
 
 // ─── 6. Erros com classe: o chamador decide sem parsear mensagens ───────────────────────────
 
+// region: exit
 #[derive(Debug, thiserror::Error)]
 pub enum EngineError {
     #[error("not found: {0}")]
@@ -147,6 +158,7 @@ pub fn exit_code(e: &EngineError) -> i32 {
         EngineError::Other(_) => 1,
     }
 }
+// endregion
 
 #[cfg(test)]
 mod tests {

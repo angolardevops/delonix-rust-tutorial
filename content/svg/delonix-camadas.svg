@@ -1,0 +1,12 @@
+<svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="As camadas do delonix-runtime e a direcção das dependências">
+<defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ar"/></marker></defs>
+<rect x="20" y="14" width="720" height="50" rx="10" class="p"/><text x="34" y="36" class="t" font-weight="700">bins/</text><text x="34" y="54" class="s">delonix · delonix-cri · delonix-mcp · delonix-mgmt — cada um compõe UMA interface</text>
+<rect x="20" y="82" width="720" height="60" rx="10" class="n"/><text x="34" y="104" class="t" font-weight="700">interfaces</text><text x="34" y="124" class="s">delonix-cri (gRPC CRI) · delonix-mgmt (API local) · delonix-mcp (servidor MCP)</text>
+<rect x="20" y="160" width="350" height="76" rx="10" class="g"/><text x="34" y="182" class="t" font-weight="700">adapters</text><text x="34" y="202" class="s">delonix-linux · -sdn · -oci · -vm · -volume</text><text x="34" y="220" class="s">-state · -scanner · -telemetry — o mundo real</text>
+<rect x="390" y="160" width="350" height="76" rx="10" class="g"/><text x="404" y="182" class="t" font-weight="700">providers</text><text x="404" y="202" class="s">delonix-proxmox · delonix-truenas</text><text x="404" y="220" class="s">sistemas remotos, sempre atrás de uma porta</text>
+<rect x="20" y="254" width="720" height="60" rx="10" class="a"/><text x="34" y="276" class="t" font-weight="700">contexts</text><text x="34" y="296" class="s">delonix-stack (reconciliador) · -compute (RunOpts) · -node · -security-runtime — o domínio, puro</text>
+<rect x="20" y="332" width="720" height="60" rx="10" class="b"/><text x="34" y="354" class="t" font-weight="700">foundation</text><text x="34" y="374" class="s">delonix-model (erros DX-CDNN, registos, typestate) · delonix-net-rules (zero dependências)</text>
+<path d="M380 82 L380 64" class="l" marker-end="url(#a4)"/><path d="M195 160 L195 142" class="l" marker-end="url(#a4)"/><path d="M565 160 L565 142" class="l" marker-end="url(#a4)"/>
+<path d="M195 254 L195 236" class="l" marker-end="url(#a4)"/><path d="M565 254 L565 236" class="l" marker-end="url(#a4)"/><path d="M380 332 L380 314" class="l" marker-end="url(#a4)"/>
+<text x="748" y="410" text-anchor="end" class="s">as setas apontam para o que cada camada PODE usar — o arch_fitness.py chumba o build se se inverter</text>
+</svg>

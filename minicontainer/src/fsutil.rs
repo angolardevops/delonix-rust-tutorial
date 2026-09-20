@@ -6,6 +6,7 @@ use std::path::{Component, Path, PathBuf};
 
 use crate::error::{Error, IoContext, Result};
 
+// region: resolve
 /// Junta `rel` a `root` recusando `..`, prefixos e — sobretudo — **symlinks** pelo caminho.
 ///
 /// Porque não basta `root.join(rel)`: uma imagem pode plantar `etc -> /` e um bind mount
@@ -37,7 +38,9 @@ pub fn resolve_in_root(root: &Path, rel: &Path, create: bool) -> Result<PathBuf>
     }
     Ok(cur)
 }
+// endregion
 
+// region: atomic-write
 /// Escrita atómica: ficheiro temporário no MESMO directório + `rename`.
 /// Um leitor concorrente vê o ficheiro antigo inteiro ou o novo inteiro — nunca metade.
 pub fn write_atomic(path: &Path, bytes: &[u8]) -> Result<()> {
@@ -48,11 +51,13 @@ pub fn write_atomic(path: &Path, bytes: &[u8]) -> Result<()> {
     f.sync_all().ctx(|| format!("fsync {}", tmp.display()))?;
     fs::rename(&tmp, path).ctx(|| format!("renaming to {}", path.display()))
 }
+// endregion
 
 fn file_name(p: &Path) -> String {
     p.file_name().map_or_else(|| "state".into(), |n| n.to_string_lossy().into_owned())
 }
 
+// region: valid-id
 /// Identificadores de container: entram em caminhos de disco e de cgroup, logo lista branca.
 pub fn valid_id(id: &str) -> Result<()> {
     let ok = !id.is_empty()
@@ -61,6 +66,7 @@ pub fn valid_id(id: &str) -> Result<()> {
         && id.bytes().all(|b| b.is_ascii_alphanumeric() || matches!(b, b'.' | b'_' | b'-'));
     if ok { Ok(()) } else { Err(Error::Spec(format!("invalid container id {id:?}"))) }
 }
+// endregion
 
 #[cfg(test)]
 mod tests {

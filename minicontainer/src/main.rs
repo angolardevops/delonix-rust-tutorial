@@ -15,6 +15,7 @@ struct Cli {
     cmd: Cmd,
 }
 
+// region: cli
 #[derive(Subcommand)]
 enum Cmd {
     /// Write a default config.json into BUNDLE (rootfs must be BUNDLE/rootfs)
@@ -61,6 +62,7 @@ enum Cmd {
     },
     List,
 }
+// endregion
 
 fn main() -> ExitCode {
     match real_main(Cli::parse()) {

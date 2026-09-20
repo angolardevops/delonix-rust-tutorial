@@ -1,0 +1,3 @@
+$ systemd-run --user --scope -q -p Delegate=yes sh -c "echo controllers-disponiveis: \$(cat /sys/fs/cgroup\$(cut -d: -f3 /proc/self/cgroup)/cgroup.controllers); echo subtree_control=\"\$(cat /sys/fs/cgroup\$(cut -d: -f3 /proc/self/cgroup)/cgroup.subtree_control)\""
+controllers-disponiveis: cpu memory pids
+subtree_control=

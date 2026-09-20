@@ -1,0 +1,66 @@
+$ cargo test --workspace   # (linhas relevantes)
+     Running unittests src/lib.rs 
+test ch01_essencial::tests::borrowing_keeps_ownership ... ok
+test ch01_essencial::tests::match_describes_every_state ... ok
+test ch01_essencial::tests::traits_allow_static_and_dynamic_dispatch ... ok
+test ch02_idiomatico::tests::builder_validates_in_one_place ... ok
+test ch01_essencial::tests::parse_size_handles_units_and_hostile_input ... ok
+test ch02_idiomatico::tests::ids_are_validated_once_at_the_boundary ... ok
+test ch02_idiomatico::tests::lifecycle_goes_forward_and_can_restart ... ok
+test ch06_distribuido::tests::apply_is_idempotent ... ok
+test ch06_distribuido::tests::backoff_grows_and_is_capped_without_overflow ... ok
+test ch06_distribuido::tests::exit_codes_are_a_stable_contract ... ok
+test ch06_distribuido::tests::only_our_own_resources_are_pruned ... ok
+test ch06_distribuido::tests::plan_is_create_update_or_noop ... ok
+test ch06_distribuido::tests::resume_rejects_a_206_for_the_wrong_offset ... ok
+test ch06_distribuido::tests::retries_only_transient_failures ... ok
+test ch06_distribuido::tests::three_way_diff_separates_our_removals_from_foreign_edits ... ok
+test ch06_distribuido::tests::atomic_write_never_exposes_a_half_file ... ok
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+     Running unittests src/bin/ns_demo.rs 
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+     Running tests/namespaces.rs 
+test a_new_uts_and_pid_namespace_isolate_the_child_and_leave_the_host_alone ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+     Running unittests src/lib.rs 
+test cgroup::tests::negative_means_unlimited_and_no_limits_means_no_files ... ok
+test cgroup::tests::translates_limits_to_v2_files ... ok
+test fsutil::tests::ids_are_allow_listed ... ok
+test image::tests::digest_format_is_validated_before_touching_disk ... ok
+test fsutil::tests::creates_missing_directories ... ok
+test spec::tests::refuses_a_bundle_that_wants_less_isolation ... ok
+test spec::tests::parses_a_real_runc_style_document ... ok
+test spec::tests::default_spec_is_valid_and_round_trips ... ok
+test fsutil::tests::refuses_parent_dir_and_symlinks ... ok
+test state::tests::a_dead_pid_is_reported_stopped ... ok
+test spec::tests::refuses_what_it_cannot_honour ... ok
+test image::tests::a_tampered_blob_is_refused ... ok
+test state::tests::create_twice_is_a_conflict_and_missing_is_not_found ... ok
+test fsutil::tests::atomic_write_replaces_whole_file ... ok
+test state::tests::concurrent_updates_do_not_lose_writes ... ok
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+     Running unittests src/main.rs 
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+     Running tests/e2e.rs 
+test a_bundle_asking_for_seccomp_is_refused_not_ignored ... ok
+test propagates_the_exit_code_of_the_workload ... ok
+test runs_as_pid_1_with_its_own_hostname ... ok
+test readonly_root_is_enforced_but_tmpfs_is_writable ... ok
+test a_missing_binary_exits_127_like_a_shell ... ok
+test drops_capabilities_to_the_oci_default_set ... ok
+test lifecycle_create_start_kill_delete_with_stable_error_classes ... ok
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+   Doc-tests examples
+test examples/src/ch02_idiomatico.rs - ch02_idiomatico::Container (line 65) ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+test examples/src/ch02_idiomatico.rs - ch02_idiomatico::Container (line 82) - compile fail ... ok
+test examples/src/ch02_idiomatico.rs - ch02_idiomatico::Container (line 74) - compile fail ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+   Doc-tests minicontainer
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; 
+$ cargo clippy --workspace --all-targets -- -D warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.78s
+$ cargo fmt --all --check && echo formatação-ok
+formatação-ok
+$ cargo deny check licenses bans sources
+bans ok, licenses ok, sources ok

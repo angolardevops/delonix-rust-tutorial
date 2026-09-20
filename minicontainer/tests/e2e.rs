@@ -12,6 +12,7 @@ struct Env {
     bundle: PathBuf,
 }
 
+// region: e2e-setup
 fn setup() -> Option<Env> {
     let bb = which("busybox")?;
     let userns_ok = Command::new("unshare").args(["-Ur", "true"]).status().is_ok_and(|s| s.success());
@@ -31,6 +32,7 @@ fn setup() -> Option<Env> {
     }
     Some(Env { root: tmp.path().join("state"), _tmp: tmp, bundle })
 }
+// endregion
 
 fn which(name: &str) -> Option<PathBuf> {
     std::env::var_os("PATH")?.to_str()?.split(':').map(|d| Path::new(d).join(name)).find(|p| p.is_file())

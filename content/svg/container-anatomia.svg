@@ -1,0 +1,13 @@
+<svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Um container é um processo com quatro mecanismos aplicados">
+<defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ar"/></marker></defs>
+<rect x="250" y="95" width="260" height="140" rx="16" class="a" stroke-width="2"/>
+<text x="380" y="150" text-anchor="middle" class="t" font-weight="700" font-size="16">processo</text>
+<text x="380" y="172" text-anchor="middle" class="s">/bin/sh, nginx, o teu código…</text>
+<text x="380" y="192" text-anchor="middle" class="s">um processo Linux normal</text>
+<rect x="30" y="20" width="210" height="76" rx="12" class="n"/><text x="135" y="46" text-anchor="middle" class="t" font-weight="700">Namespaces</text><text x="135" y="66" text-anchor="middle" class="s">o que VÊ</text><text x="135" y="82" text-anchor="middle" class="s">pid · mnt · net · uts · ipc · user</text>
+<rect x="520" y="20" width="210" height="76" rx="12" class="g"/><text x="625" y="46" text-anchor="middle" class="t" font-weight="700">cgroups v2</text><text x="625" y="66" text-anchor="middle" class="s">quanto GASTA</text><text x="625" y="82" text-anchor="middle" class="s">memory.max · pids.max · cpu.max</text>
+<rect x="30" y="234" width="210" height="76" rx="12" class="p"/><text x="135" y="260" text-anchor="middle" class="t" font-weight="700">Capabilities + seccomp</text><text x="135" y="280" text-anchor="middle" class="s">o que PODE fazer</text><text x="135" y="296" text-anchor="middle" class="s">14 caps OCI · filtro de syscalls</text>
+<rect x="520" y="234" width="210" height="76" rx="12" class="b"/><text x="625" y="260" text-anchor="middle" class="t" font-weight="700">pivot_root</text><text x="625" y="280" text-anchor="middle" class="s">qual é o seu /</text><text x="625" y="296" text-anchor="middle" class="s">o rootfs da imagem, não o do host</text>
+<path d="M240 70 L290 95" class="l" marker-end="url(#a1)"/><path d="M520 70 L470 95" class="l" marker-end="url(#a1)"/><path d="M240 260 L290 235" class="l" marker-end="url(#a1)"/><path d="M520 260 L470 235" class="l" marker-end="url(#a1)"/>
+<text x="380" y="318" text-anchor="middle" class="s">o «runtime» é o programa que aplica os quatro pela ordem certa</text>
+</svg>

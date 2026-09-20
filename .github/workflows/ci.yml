@@ -1,0 +1,37 @@
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+
+permissions: { contents: read }
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+
+jobs:
+  rust:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with: { components: "rustfmt, clippy" }
+      - uses: Swatinem/rust-cache@v2
+      - run: sudo apt-get update && sudo apt-get install -y busybox-static jq
+      # O Ubuntu 24.04 restringe user namespaces sem privilégio (AppArmor). Os testes E2E do
+      # minicontainer precisam deles; se o runner os recusar, os testes SALTAM com aviso.
+      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || true
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - run: cargo test --workspace --doc
+  deny:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: EmbarkStudios/cargo-deny-action@v2
+  site:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install markdown
+      - run: python3 build.py --check

@@ -1,0 +1,9 @@
+$ grep -E "^Cap(Inh|Prm|Eff|Bnd)" /proc/self/status
+CapInh:	0000000000000000
+CapPrm:	0000000000000000
+CapEff:	0000000000000000
+CapBnd:	000001ffffffffff
+$ unshare -Ur sh -c "grep -E \"^Cap(Prm|Eff|Bnd)\" /proc/self/status"
+CapPrm:	000001ffffffffff
+CapEff:	000001ffffffffff
+CapBnd:	000001ffffffffff

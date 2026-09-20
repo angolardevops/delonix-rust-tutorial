@@ -1,0 +1,8 @@
+$ unshare --user --map-root-user --pid --fork --mount-proc --uts sh -c "hostname dentro; echo hostname=\$(hostname) pid=\$\$; id -u; ps -o pid,comm"
+hostname=dentro pid=1
+0
+    PID COMMAND
+      1 sh
+      5 ps
+$ hostname   # o do host, intacto
+kaeso-sys-01

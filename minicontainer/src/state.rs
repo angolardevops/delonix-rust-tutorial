@@ -110,6 +110,7 @@ impl Store {
         }
     }
 
+    // region: state-update
     /// Read-modify-write sob `flock`. A closure decide o que fazer com o estado ACTUAL.
     pub fn update<T>(&self, id: &str, f: impl FnOnce(&mut State) -> Result<T>) -> Result<T> {
         let dir = self.dir(id)?;
@@ -127,6 +128,7 @@ impl Store {
         self.write(&state)?;
         Ok(out)
     }
+    // endregion
 
     pub fn list(&self) -> Result<Vec<State>> {
         let mut out = Vec::new();
@@ -146,6 +148,7 @@ impl Store {
     }
 }
 
+// region: reconcile
 /// O estado em disco pode mentir (o supervisor morreu, a máquina reiniciou): reconcilia com a
 /// realidade. Nunca se confia só no ficheiro — a mesma lição do `reconcile_status` do delonix.
 pub fn reconcile(mut st: State) -> State {
@@ -156,6 +159,7 @@ pub fn reconcile(mut st: State) -> State {
     }
     st
 }
+// endregion
 
 #[cfg(test)]
 mod tests {
@@ -188,6 +192,7 @@ mod tests {
         assert!(matches!(s.load("zzz"), Err(Error::NotFound(_))));
     }
 
+    // region: concurrent-test
     #[test]
     fn concurrent_updates_do_not_lose_writes() {
         let (_d, s) = store();
@@ -212,6 +217,7 @@ mod tests {
         handles.into_iter().for_each(|h| h.join().unwrap());
         assert_eq!(s.load("c").unwrap().pid, 16);
     }
+    // endregion
 
     #[test]
     fn a_dead_pid_is_reported_stopped() {

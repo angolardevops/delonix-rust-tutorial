@@ -1,3 +1,3 @@
 $ systemd-run --user --scope -p Delegate=yes mc run cg -b bundle
-0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r098dd7025ce04276a7a99b439fa3b241.scope/mc-cg2
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/run-r794cad54fa1443259ab5bf59cbefe413.scope/mc-cg2
 [exit 0]

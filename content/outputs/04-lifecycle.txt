@@ -5,13 +5,13 @@ $ mc state life
   "ociVersion": "1.0.2",
   "id": "life",
   "status": "created",
-  "pid": 1895416,
-  "bundle": "/tmp/tmp.ALsNWnQIdz/b"
+  "pid": 1990121,
+  "bundle": "bundle"
 }
 $ mc start life
 [exit 0]
 $ mc list
-life                 running  1895416  /tmp/tmp.ALsNWnQIdz/b
+life                 running  1990121  bundle
 $ mc logs life
 arrancou
 $ mc create life -b bundle   # duplicado
@@ -27,8 +27,9 @@ $ mc state life
   "ociVersion": "1.0.2",
   "id": "life",
   "status": "stopped",
-  "pid": 1895416,
-  "bundle": "/tmp/tmp.ALsNWnQIdz/b"
+  "pid": 1990121,
+  "bundle": "bundle",
+  "exitCode": 137
 }
 $ mc delete life
 [exit 0]

@@ -4,6 +4,7 @@ use std::marker::PhantomData;
 
 // ─── Newtype com validação na fronteira ─────────────────────────────────────────────────────
 
+// region: newtype
 /// Um id de container **validado uma vez**, à entrada. Todo o código a jusante recebe
 /// `ContainerId` e não precisa de re-validar — e não há forma de construir um inválido.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -46,9 +47,11 @@ impl ContainerId {
         &self.0
     }
 }
+// endregion
 
 // ─── Typestate: transições ilegais não compilam ─────────────────────────────────────────────
 
+// region: typestate
 #[derive(Debug)]
 pub struct Created;
 #[derive(Debug)]
@@ -122,9 +125,11 @@ impl<S> Container<S> {
         &self.id
     }
 }
+// endregion
 
 // ─── Builder: muitos parâmetros opcionais, um único ponto de validação ──────────────────────
 
+// region: builder
 #[derive(Debug, PartialEq, Eq)]
 pub struct RunSpec {
     pub image: String,
@@ -175,6 +180,7 @@ impl RunSpecBuilder {
         Ok(RunSpec { image, memory: self.memory, env: self.env, read_only: self.read_only })
     }
 }
+// endregion
 
 // ─── Iteradores em vez de laços com estado ──────────────────────────────────────────────────
 

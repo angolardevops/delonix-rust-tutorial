@@ -1,4 +1,4 @@
-$ /home/walter/workspace/delonix-rust-tutorial/target/release/mc run demo -b /tmp/tmp.ALsNWnQIdz/b
+$ mc run demo -b bundle
 pid=1 host=minicontainer uid=0
 CapBnd:	00000000a80425fb
 fd

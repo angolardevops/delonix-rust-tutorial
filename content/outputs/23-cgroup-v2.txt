@@ -1,0 +1,6 @@
+$ stat -fc %T /sys/fs/cgroup
+cgroup2fs
+$ cat /sys/fs/cgroup/cgroup.controllers
+cpuset cpu io memory hugetlb pids rdma misc dmem
+$ cut -d: -f3 /proc/self/cgroup | sed "s#/app.slice/.*#/app.slice/…#"
+/user.slice/user-1000.slice/user@1000.service/app.slice/…

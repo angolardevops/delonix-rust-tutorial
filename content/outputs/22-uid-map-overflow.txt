@@ -1,0 +1,6 @@
+$ unshare --user sh -c "cat /proc/self/uid_map; echo ---; id"
+---
+uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
+$ unshare --user --map-root-user sh -c "cat /proc/self/uid_map; id -u"
+         0       1000          1
+0

@@ -53,6 +53,7 @@ struct RuntimeConfig {
     working_dir: String,
 }
 
+// region: blob-path
 /// `sha256:<64 hex>` → caminho do blob. A validação do formato NÃO é cosmética:
 /// um `digest` como `sha256:../../etc/passwd` sairia do layout.
 fn blob_path(layout: &Path, digest: &str) -> Result<(PathBuf, String)> {
@@ -62,6 +63,7 @@ fn blob_path(layout: &Path, digest: &str) -> Result<(PathBuf, String)> {
         .ok_or_else(|| Error::Spec(format!("unsupported digest {digest:?}")))?;
     Ok((layout.join("blobs/sha256").join(hex), hex.to_ascii_lowercase()))
 }
+// endregion
 
 fn sha256_file(path: &Path) -> Result<String> {
     let mut f = fs::File::open(path).ctx(|| format!("opening {}", path.display()))?;
@@ -77,6 +79,7 @@ fn sha256_file(path: &Path) -> Result<String> {
     Ok(hex::encode(hasher.finalize()))
 }
 
+// region: verified
 /// Devolve o caminho do blob **já verificado**.
 fn verified_blob(layout: &Path, digest: &str) -> Result<PathBuf> {
     let (path, expected) = blob_path(layout, digest)?;
@@ -86,12 +89,14 @@ fn verified_blob(layout: &Path, digest: &str) -> Result<PathBuf> {
     }
     Ok(path)
 }
+// endregion
 
 fn read_json<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T> {
     let bytes = fs::read(path).ctx(|| format!("reading {}", path.display()))?;
     serde_json::from_slice(&bytes).map_err(|source| Error::Json { path: path.into(), source })
 }
 
+// region: unpack
 /// Desempacota `layout` em `bundle/rootfs` e gera `bundle/config.json`.
 pub fn unpack(layout: &Path, bundle: &Path) -> Result<()> {
     let index: Index = read_json(&layout.join("index.json"))?;
@@ -134,7 +139,9 @@ pub fn unpack(layout: &Path, bundle: &Path) -> Result<()> {
         .map_err(|source| Error::Json { path: bundle.join("config.json"), source })?;
     write_atomic(&bundle.join("config.json"), &json)
 }
+// endregion
 
+// region: layer
 fn apply_layer(blob: &Path, media_type: &str, rootfs: &Path) -> Result<()> {
     let file = fs::File::open(blob).ctx(|| format!("opening {}", blob.display()))?;
     let reader: Box<dyn Read> = match media_type {
@@ -178,6 +185,7 @@ fn apply_layer(blob: &Path, media_type: &str, rootfs: &Path) -> Result<()> {
     }
     make_dirs_writable(rootfs)
 }
+// endregion
 
 fn empty_dir(dir: &Path) -> Result<()> {
     if let Ok(rd) = fs::read_dir(dir) {

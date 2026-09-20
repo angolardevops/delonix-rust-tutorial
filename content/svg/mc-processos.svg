@@ -1,0 +1,17 @@
+<svg viewBox="0 0 780 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Processos do minicontainer: create, supervisor, init, start e o estado em disco">
+<defs><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ar"/></marker></defs>
+<rect x="10" y="20" width="150" height="70" rx="10" class="b"/><text x="85" y="46" text-anchor="middle" class="t" font-weight="700">mc create</text><text x="85" y="66" text-anchor="middle" class="s">CLI · volta ao terminal</text>
+<path d="M160 55 L215 55" class="l" marker-end="url(#a5)"/><text x="188" y="45" text-anchor="middle" class="s">fork</text>
+<rect x="220" y="20" width="230" height="140" rx="10" class="n"/><text x="335" y="44" text-anchor="middle" class="t" font-weight="700">supervisor</text><text x="335" y="64" text-anchor="middle" class="s">setsid · sem terminal</text>
+<text x="335" y="84" text-anchor="middle" class="s">unshare(user,pid,uts,ipc,net)</text><text x="335" y="102" text-anchor="middle" class="s">map_ids · lo up · attach cgroup</text><text x="335" y="128" text-anchor="middle" class="s">waitpid → grava «stopped»</text><text x="335" y="146" text-anchor="middle" class="s">+ exit code + OOM</text>
+<path d="M450 90 L505 90" class="l" marker-end="url(#a5)"/><text x="478" y="80" text-anchor="middle" class="s">fork</text>
+<rect x="510" y="20" width="260" height="140" rx="10" class="a"/><text x="640" y="44" text-anchor="middle" class="t" font-weight="700">init — PID 1 do container</text>
+<text x="640" y="66" text-anchor="middle" class="s">unshare(mnt) · MS_PRIVATE</text><text x="640" y="84" text-anchor="middle" class="s">mounts · /dev · pivot_root</text><text x="640" y="102" text-anchor="middle" class="s">readonly · hostname · caps · no_new_privs</text><text x="640" y="126" text-anchor="middle" class="s">read(FIFO) … bloqueia</text><text x="640" y="146" text-anchor="middle" class="s">depois: exec(processo do utilizador)</text>
+<path d="M510 125 C 470 190, 420 190, 380 205" class="l" marker-end="url(#a5)" stroke-dasharray="4 4"/><text x="425" y="186" text-anchor="middle" class="s">relatório (pipe): K&lt;pid&gt; | E&lt;msg&gt;</text>
+<path d="M270 160 C 240 190, 190 175, 120 91" class="l" marker-end="url(#a5)" stroke-dasharray="4 4"/><text x="150" y="150" text-anchor="middle" class="s">relatório</text>
+<rect x="10" y="215" width="150" height="70" rx="10" class="b"/><text x="85" y="241" text-anchor="middle" class="t" font-weight="700">mc start</text><text x="85" y="261" text-anchor="middle" class="s">outro processo, depois</text>
+<path d="M160 250 L400 250" class="l" marker-end="url(#a5)"/><text x="280" y="242" text-anchor="middle" class="s">escreve 1 byte</text>
+<rect x="405" y="218" width="150" height="64" rx="10" class="g"/><text x="480" y="244" text-anchor="middle" class="t" font-weight="700">start.fifo</text><text x="480" y="264" text-anchor="middle" class="s">mkfifo no create</text>
+<path d="M555 250 C 600 250, 630 200, 640 162" class="l" marker-end="url(#a5)"/>
+<rect x="10" y="305" width="760" height="44" rx="10" class="p"/><text x="390" y="325" text-anchor="middle" class="t" font-weight="700">$MC_ROOT/&lt;id&gt;/  state.json · lock · start.fifo · output.log</text><text x="390" y="341" text-anchor="middle" class="s">toda a comunicação entre invocações passa por ficheiros (flock + rename atómico) — sem daemon, sem socket</text>
+</svg>

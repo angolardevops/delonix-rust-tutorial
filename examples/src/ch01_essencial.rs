@@ -2,6 +2,7 @@
 
 // ─── Ownership e empréstimos ────────────────────────────────────────────────────────────────
 
+// region: ownership
 /// `&str` empresta: quem chama continua dono da `String`.
 pub fn is_valid_name(name: &str) -> bool {
     !name.is_empty() && name.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-')
@@ -11,9 +12,11 @@ pub fn is_valid_name(name: &str) -> bool {
 pub fn into_label(name: String) -> String {
     format!("delonix.io/name={name}")
 }
+// endregion
 
 // ─── Enums que carregam dados + match exaustivo ─────────────────────────────────────────────
 
+// region: enums
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Status {
     Created,
@@ -33,9 +36,11 @@ impl Status {
         }
     }
 }
+// endregion
 
 // ─── Result e o operador `?` ────────────────────────────────────────────────────────────────
 
+// region: result
 #[derive(Debug, PartialEq, Eq)]
 pub enum ParseError {
     Empty,
@@ -59,9 +64,11 @@ pub fn parse_size(s: &str) -> Result<u64, ParseError> {
     let n = u64::try_from(n).map_err(|_| ParseError::Negative(n))?;
     Ok(n.saturating_mul(mult)) // saturating: input hostil não pode dar overflow silencioso
 }
+// endregion
 
 // ─── Traits: o padrão «backend» ─────────────────────────────────────────────────────────────
 
+// region: traits
 /// Mesma forma que o `VmBackend` do delonix: o motor fala com a *interface*, e cada
 /// hypervisor é uma implementação — nunca um `if provider == "libvirt"` espalhado.
 pub trait Backend {
@@ -106,6 +113,7 @@ pub fn boot_static<B: Backend>(b: &B, name: &str) -> Result<u32, String> {
 pub fn boot_all(backends: &[Box<dyn Backend>], name: &str) -> Vec<(&'static str, Result<u32, String>)> {
     backends.iter().map(|b| (b.id(), b.boot(name))).collect()
 }
+// endregion
 
 #[cfg(test)]
 mod tests {

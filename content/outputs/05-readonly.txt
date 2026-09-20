@@ -1,4 +1,4 @@
-$ /home/walter/workspace/delonix-rust-tutorial/target/release/mc run ro -b /tmp/tmp.ALsNWnQIdz/b
+$ mc run ro -b bundle
 touch: /x: Read-only file system
 touch /x -> rc=1
 touch /tmp/x -> ok

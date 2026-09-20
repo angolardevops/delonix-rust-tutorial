@@ -32,6 +32,7 @@ use crate::state::{State, Status, Store, reconcile};
 /// Capabilities que o container mantém (o conjunto por omissão da runtime-spec).
 const KEEP_CAPS: [u32; 14] = [0, 1, 3, 4, 5, 6, 7, 8, 10, 13, 18, 27, 29, 31];
 
+// region: stdio
 /// Para onde vai o stdio do container.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Stdio {
@@ -42,7 +43,9 @@ pub enum Stdio {
     /// chegaria quando o container morresse.
     Log,
 }
+// endregion
 
+// region: create
 pub fn create(store: &Store, id: &str, bundle: &Path, stdio: Stdio) -> Result<()> {
     let bundle = bundle.canonicalize().ctx(|| format!("bundle {}", bundle.display()))?;
     let spec = Spec::load(&bundle)?;
@@ -64,7 +67,9 @@ pub fn create(store: &Store, id: &str, bundle: &Path, stdio: Stdio) -> Result<()
     }
     result
 }
+// endregion
 
+// region: spawn
 fn spawn(store: &Store, id: &str, spec: &Spec, rootfs: &Path, stdio: Stdio) -> Result<()> {
     let fifo = store.fifo(id)?;
     mkfifo(&fifo, Mode::from_bits_truncate(0o600))?;
@@ -95,6 +100,7 @@ fn spawn(store: &Store, id: &str, spec: &Spec, rootfs: &Path, stdio: Stdio) -> R
         }
     }
 }
+// endregion
 
 /// stdin ← /dev/null; stdout/stderr → ficheiro. Herdado pelo init.
 fn detach_stdio(log: &Path) -> Result<()> {
@@ -110,6 +116,7 @@ fn detach_stdio(log: &Path) -> Result<()> {
     Ok(())
 }
 
+// region: supervise
 /// Corre no processo supervisor. Nunca regressa.
 #[allow(clippy::too_many_arguments)]
 fn supervise(
@@ -199,6 +206,7 @@ fn supervise(
     }
     std::process::exit(0)
 }
+// endregion
 
 /// Escrita best-effort num pipe de relatório (o leitor pode já ter desistido).
 fn send(fd: &OwnedFd, msg: &[u8]) {
@@ -210,6 +218,7 @@ fn die(out: OwnedFd, e: &Error) -> ! {
     std::process::exit(1)
 }
 
+// region: recv
 /// Lê o relatório: `K<texto>` = ok, `E<mensagem>` = erro, EOF = o filho morreu sem dizer nada.
 ///
 /// UMA leitura, não «até ao EOF»: o emissor pode manter o pipe aberto até ao `exec`
@@ -224,7 +233,9 @@ fn recv_report(fd: OwnedFd) -> Result<String> {
         _ => Err(Error::Setup("container process died during setup".into())),
     }
 }
+// endregion
 
+// region: map-ids
 /// Mapeamento de um só uid/gid (root dentro = o teu utilizador fora). Para vários uids seria
 /// preciso `newuidmap` + `/etc/subuid`.
 fn map_ids(uid: nix::unistd::Uid, gid: nix::unistd::Gid) -> Result<()> {
@@ -235,7 +246,9 @@ fn map_ids(uid: nix::unistd::Uid, gid: nix::unistd::Gid) -> Result<()> {
     w("uid_map", format!("0 {uid} 1"))?;
     w("gid_map", format!("0 {gid} 1"))
 }
+// endregion
 
+// region: loopback
 /// Sobe `lo` no netns novo (ioctl SIOCSIFFLAGS). Sem isto `127.0.0.1` não responde.
 fn loopback_up() -> Result<()> {
     // SAFETY: `ifreq` é POD de zeros válido; o socket é fechado no fim; nomes ≤ IFNAMSIZ.
@@ -255,7 +268,9 @@ fn loopback_up() -> Result<()> {
         if rc < 0 { Err(Error::Sys(err)) } else { Ok(()) }
     }
 }
+// endregion
 
+// region: init
 /// PID 1 do container. Só regressa com erro — no sucesso faz `exec`.
 fn container_init(
     spec: &Spec,
@@ -312,11 +327,13 @@ fn container_init(
     eprintln!("mc: cannot exec {:?}: {err}", spec.process.args[0]);
     std::process::exit(if err == nix::Error::ENOENT { 127 } else { 126 });
 }
+// endregion
 
 fn cstr(s: &str) -> Result<CString> {
     CString::new(s).map_err(|_| Error::Spec(format!("NUL byte in {s:?}")))
 }
 
+// region: caps
 fn drop_capabilities() -> Result<()> {
     let last: u32 = fs::read_to_string("/proc/sys/kernel/cap_last_cap")
         .ok()
@@ -331,6 +348,7 @@ fn drop_capabilities() -> Result<()> {
     }
     Ok(())
 }
+// endregion
 
 /// Flags «trancadas» que o mount herdado do host impõe: um remount sem elas dá EPERM em userns.
 fn inherited_flags(path: &str) -> MsFlags {
@@ -357,6 +375,7 @@ fn remount_ro(path: &str) -> Result<()> {
     Ok(())
 }
 
+// region: apply-mount
 fn apply_mount(rootfs: &Path, m: &Mount) -> Result<()> {
     let target = resolve_in_root(rootfs, &m.destination, true)?;
     let (mut flags, mut ro) = (MsFlags::empty(), false);
@@ -405,7 +424,9 @@ fn apply_mount(rootfs: &Path, m: &Mount) -> Result<()> {
     }
     Ok(())
 }
+// endregion
 
+// region: setup-dev
 /// Sem root não há `mknod`: os dispositivos básicos são *bind-mounts* dos do host.
 fn setup_dev(rootfs: &Path) -> Result<()> {
     let dev = resolve_in_root(rootfs, Path::new("/dev"), false)?; // sem symlinks pelo caminho
@@ -430,7 +451,9 @@ fn setup_dev(rootfs: &Path) -> Result<()> {
     }
     Ok(())
 }
+// endregion
 
+// region: start
 pub fn start(store: &Store, id: &str) -> Result<()> {
     let st = reconcile(store.load(id)?);
     if st.status != Status::Created {
@@ -447,6 +470,7 @@ pub fn start(store: &Store, id: &str) -> Result<()> {
         Ok(())
     })
 }
+// endregion
 
 pub fn kill_container(store: &Store, id: &str, sig: Signal) -> Result<()> {
     let st = reconcile(store.load(id)?);
@@ -481,6 +505,7 @@ pub fn delete(store: &Store, id: &str, force: bool) -> Result<()> {
     store.remove(id)
 }
 
+// region: wait
 /// Espera (com tecto) que o supervisor registe o fim.
 ///
 /// Espera pelo estado **persistido** `stopped`, não por «o PID morreu»: entre as duas coisas o
@@ -503,3 +528,4 @@ pub fn wait_stopped(store: &Store, id: &str) -> Option<i32> {
     }
     None
 }
+// endregion

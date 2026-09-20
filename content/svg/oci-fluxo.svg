@@ -1,0 +1,15 @@
+<svg viewBox="0 0 780 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Da imagem OCI ao container em execução">
+<defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ar"/></marker></defs>
+<text x="95" y="20" text-anchor="middle" class="s">image-spec</text><text x="390" y="20" text-anchor="middle" class="s">runtime-spec</text>
+<rect x="10" y="30" width="170" height="170" rx="12" class="n"/><text x="95" y="54" text-anchor="middle" class="t" font-weight="700">Imagem (layout)</text>
+<text x="95" y="82" text-anchor="middle" class="s">index.json</text><text x="95" y="102" text-anchor="middle" class="s">↓ manifest</text><text x="95" y="122" text-anchor="middle" class="s">↓ config + layers</text><text x="95" y="146" text-anchor="middle" class="s">blobs/sha256/&lt;hash&gt;</text><text x="95" y="170" text-anchor="middle" class="s">endereçada por conteúdo</text>
+<path d="M180 115 L235 115" class="l" marker-end="url(#a2)"/><text x="207" y="104" text-anchor="middle" class="s">unpack</text>
+<rect x="240" y="30" width="170" height="170" rx="12" class="a"/><text x="325" y="54" text-anchor="middle" class="t" font-weight="700">Bundle</text>
+<text x="325" y="86" text-anchor="middle" class="s">config.json</text><text x="325" y="106" text-anchor="middle" class="s">+ rootfs/</text><text x="325" y="140" text-anchor="middle" class="s">verifica digests</text><text x="325" y="160" text-anchor="middle" class="s">aplica layers e whiteouts</text>
+<path d="M410 115 L465 115" class="l" marker-end="url(#a2)"/><text x="437" y="104" text-anchor="middle" class="s">run</text>
+<rect x="470" y="30" width="150" height="170" rx="12" class="g"/><text x="545" y="54" text-anchor="middle" class="t" font-weight="700">Runtime OCI</text>
+<text x="545" y="86" text-anchor="middle" class="s">create</text><text x="545" y="106" text-anchor="middle" class="s">start</text><text x="545" y="126" text-anchor="middle" class="s">kill</text><text x="545" y="146" text-anchor="middle" class="s">delete · state</text><text x="545" y="180" text-anchor="middle" class="s">runc · mc · delonix</text>
+<path d="M620 115 L660 115" class="l" marker-end="url(#a2)"/>
+<rect x="665" y="70" width="105" height="90" rx="12" class="p"/><text x="717" y="106" text-anchor="middle" class="t" font-weight="700">processo</text><text x="717" y="126" text-anchor="middle" class="s">isolado, PID 1</text><text x="717" y="142" text-anchor="middle" class="s">limitado</text>
+<text x="390" y="232" text-anchor="middle" class="s">um runtime de baixo nível só conhece o bundle — desempacotar a imagem é trabalho de quem chama</text>
+</svg>

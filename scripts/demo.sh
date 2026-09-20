@@ -56,6 +56,14 @@ scripts/make-oci-layout.sh "$work/b" "$work/img" > /dev/null
  echo "\$ jq -c .process bundle2/config.json"; jq -c '.process' "$work/b2/config.json"
  echo "\$ mc run img -b bundle2"; $mc run img -b "$work/b2"; echo "[exit $?]"
 } > $out/11-imagem-oci.txt 2>&1
+{
+ echo "\$ cat index.json"; jq -c . "$work/img/index.json"
+ m=$(jq -r '.manifests[0].digest' "$work/img/index.json" | cut -d: -f2)
+ echo "\$ cat blobs/sha256/<manifest>"; jq . "$work/img/blobs/sha256/$m"
+ c=$(jq -r '.config.digest' "$work/img/blobs/sha256/$m" | cut -d: -f2)
+ echo "\$ cat blobs/sha256/<config>"; jq . "$work/img/blobs/sha256/$c"
+} > $out/14-oci-json.txt 2>&1
+{ echo "\$ mc spec bundle -- /bin/sh   # gera um config.json mínimo"; $mc spec "$work/b" -- /bin/sh; jq . "$work/b/config.json"; } > $out/15-config-json.txt 2>&1
 cp -r "$work/img" "$work/img-bad"
 l1=$(jq -r '.layers[0].digest' "$work/img-bad/blobs/sha256/$(jq -r '.manifests[0].digest' "$work/img-bad/index.json" | cut -d: -f2)" | cut -d: -f2)
 echo x >> "$work/img-bad/blobs/sha256/$l1"
@@ -68,5 +76,5 @@ if command -v runc >/dev/null; then
     echo "\$ runc run rc   # o MESMO bundle que o mc acabou de correr (+ mapeamentos de user ns)"
     (cd "$work/b2" && timeout 30 runc --root "$work/runc" run rc 2>&1); echo "[exit $?]"; } > $out/13-runc-mesmo-bundle.txt
 fi
-sed -i "s#$work/b2#bundle2#g; s#$work/b3#bundle3#g; s#$work/b#bundle#g; s#$mc#mc#g; s#$work#…#g" $out/*.txt
+sed -i "s#$work/b2#bundle2#g; s#$work/b3#bundle3#g; s#$work/b#bundle#g; s#$mc#mc#g; s#[0-9a-f]\{64\}#&#g; s#$work#…#g" $out/*.txt
 echo "saídas gravadas em $out"; ls $out
