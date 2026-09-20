@@ -84,11 +84,15 @@
         if (e._h.indexOf(t) >= 0) s += e._h === t ? 14 : (e._h.split(/[^a-z0-9_]+/).indexOf(t) >= 0 ? 9 : 6);
         if (e._t.indexOf(t) >= 0) s += 3;
         var pos = e._x.indexOf(t);
-        if (pos >= 0) s += 2 + (e._x.indexOf(' ' + t) >= 0 ? 1 : 0);
+        if (pos >= 0) {
+          var occ = 0, at = -1; while (occ < 8 && (at = e._x.indexOf(t, at + 1)) >= 0) occ++;   // frequência (com tecto)
+          s += 2 + (e._x.indexOf(' ' + t) >= 0 ? 1 : 0) + occ * 0.9;
+        }
         if (!s) return;               // todos os termos têm de aparecer (AND)
         score += s;
       }
       if (e._h.indexOf(norm(q).trim()) >= 0) score += 8;   // a frase inteira no título
+      if (e.p === 'index') score -= 6;                      // a página inicial é só um mapa: não deve ganhar a conteúdo
       out.push({ e: e, s: score });
     });
     out.sort(function (a, b) { return b.s - a.s; });

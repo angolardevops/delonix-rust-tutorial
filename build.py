@@ -170,7 +170,7 @@ class Sectionizer(HTMLParser):
     def flush(self):
         text = re.sub(r"\s+", " ", " ".join(self.cur["x"])).strip()
         if self.cur["h"] or text:
-            self.sections.append({"a": self.cur["a"], "h": self.cur["h"].strip().rstrip("¶#").strip(), "x": text[:900]})
+            self.sections.append({"a": self.cur["a"], "h": self.cur["h"].strip().rstrip("¶#").strip(), "x": text[:1800]})
 
 
 def sectionize(body_html: str):
