@@ -14,10 +14,13 @@ struct Env {
 
 // region: e2e-setup
 fn setup() -> Option<Env> {
-    let bb = which("busybox")?;
+    let Some(bb) = which("busybox") else {
+        skip("busybox não encontrado");
+        return None;
+    };
     let userns_ok = Command::new("unshare").args(["-Ur", "true"]).status().is_ok_and(|s| s.success());
     if !userns_ok {
-        eprintln!("SKIP: user namespaces indisponíveis");
+        skip("user namespaces indisponíveis");
         return None;
     }
     let tmp = tempfile::tempdir().unwrap();
@@ -33,6 +36,13 @@ fn setup() -> Option<Env> {
     Some(Env { root: tmp.path().join("state"), _tmp: tmp, bundle })
 }
 // endregion
+
+/// Em CI (`MC_REQUIRE_E2E=1`) saltar é FALHAR: um verde por ausência de execução
+/// é indistinguível de um verde por sucesso.
+fn skip(why: &str) {
+    assert!(std::env::var_os("MC_REQUIRE_E2E").is_none(), "E2E obrigatório em CI mas não pode correr: {why}");
+    eprintln!("SKIP: {why}");
+}
 
 fn which(name: &str) -> Option<PathBuf> {
     std::env::var_os("PATH")?.to_str()?.split(':').map(|d| Path::new(d).join(name)).find(|p| p.is_file())

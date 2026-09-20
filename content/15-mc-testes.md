@@ -84,7 +84,7 @@ Dizê-lo é parte do trabalho:
 - **A suite oficial do OCI** (`runtime-tools`) **não** foi corrida. A contra-prova é **um** bundle no `runc`, não conformidade total.
 - **Um só uid mapeado.** Imagens com ficheiros de vários donos (e `USER` não-root) não foram testadas.
 - **Sem `seccomp` nem rede** — recusa-se o primeiro; do segundo só há o `lo`.
-- **CI**: os testes E2E dependem de user namespaces e `busybox`; no GitHub Actions o *runner* pode restringi-los (o teste salta e diz). **Verifica o resultado do primeiro run** em vez de assumir.
+- **CI**: os testes E2E dependem de user namespaces e `busybox`. No GitHub Actions correram de facto (7 testes em 0,5 s, como no host de desenvolvimento) — e a CI define `MC_REQUIRE_E2E=1`, que faz o teste **falhar** em vez de saltar se o *runner* deixar de os permitir. Sem isso, um verde por ausência de execução seria indistinguível de um verde por sucesso.
 - **Sem *fuzzing*.** O `unpack` de arquivos e o parser da spec são superfícies óbvias para `cargo fuzz` — fica como exercício.
 
 ## Corre tu
