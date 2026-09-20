@@ -42,10 +42,6 @@ fn main() {
             // quem o confirma é o processo de fora (ver tests/namespaces.rs).
             let seen = gethostname().map(|h| h.to_string_lossy().into_owned()).unwrap_or_default();
             println!("parent: hostname antes={host_before:?} agora={seen:?} (partilha o ns com o filho)");
-            println!(
-                "parent: hostname antes={host_before:?} depois={host_after:?} (inalterado: {})",
-                host_before == host_after
-            );
         }
     }
 }
