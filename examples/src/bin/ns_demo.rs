@@ -37,7 +37,11 @@ fn main() {
         }
         ForkResult::Parent { child } => {
             assert!(matches!(waitpid(child, None), Ok(WaitStatus::Exited(_, 0))));
-            let host_after = gethostname().map(|h| h.to_string_lossy().into_owned()).unwrap_or_default();
+            // O pai também está no UTS namespace novo (o `unshare` aplica-se a quem chama e os filhos
+            // herdam), por isso vê o nome que o filho pôs. O HOST verdadeiro é que não muda —
+            // quem o confirma é o processo de fora (ver tests/namespaces.rs).
+            let seen = gethostname().map(|h| h.to_string_lossy().into_owned()).unwrap_or_default();
+            println!("parent: hostname antes={host_before:?} agora={seen:?} (partilha o ns com o filho)");
             println!(
                 "parent: hostname antes={host_before:?} depois={host_after:?} (inalterado: {})",
                 host_before == host_after

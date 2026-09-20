@@ -1,3 +1,4 @@
+#![allow(clippy::unwrap_used)] // helpers de teste: um pânico é a própria falha
 //! Testes de integração: correm o binário `mc` a sério.
 //! Saltam (com aviso) quando o host não permite user namespaces ou não há busybox estático —
 //! um teste que «passa» sem ter corrido nada é pior do que um que diz que saltou.
