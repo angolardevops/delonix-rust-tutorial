@@ -1,0 +1,25 @@
+[workspace]
+resolver = "3"
+members = ["minicontainer", "examples"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.90"
+license = "Apache-2.0"
+repository = "https://github.com/angolardevops/delonix-rust-tutorial"
+
+# Lints partilhados: um sítio só, herdados por cada crate com `[lints] workspace = true`.
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+unwrap_used = "warn"          # nunca em código de produção; testes podem (allow local)
+dbg_macro = "warn"
+todo = "warn"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+panic = "abort"   # um container runtime não faz unwinding através de fork/exec

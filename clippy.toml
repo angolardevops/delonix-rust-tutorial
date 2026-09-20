@@ -1,0 +1,3 @@
+# `unwrap()` é aceitável em testes (um pânico É a falha do teste); em código de produção não.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true

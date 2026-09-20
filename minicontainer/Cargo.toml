@@ -1,0 +1,30 @@
+[package]
+name = "minicontainer"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "A minimal rootless, daemonless OCI runtime — the capstone of the delonix-rust tutorial"
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+flate2 = "1.1.10"
+hex = "0.4.3"
+libc = "0.2.189"
+nix = { version = "0.31.3", features = ["sched", "mount", "process", "fs", "signal", "user", "hostname"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+sha2 = "0.11.0"
+tar = "0.4.46"
+thiserror = "2.0.20"
+
+[dev-dependencies]
+serde_json = "1.0.151"
+tempfile = "3.27.0"
+
+[[bin]]
+name = "mc"
+path = "src/main.rs"
+
+[lints]
+workspace = true

@@ -1,0 +1,16 @@
+[package]
+name = "examples"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+description = "Every code sample of the tutorial chapters, compiled and tested in CI"
+
+[dependencies]
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+nix = { version = "0.31", features = ["sched", "process", "signal", "fs", "mount", "user"] }
+
+[lints]
+workspace = true
