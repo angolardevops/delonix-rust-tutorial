@@ -1,0 +1,2 @@
+$ mc run e -b bundle   # o processo faz 'exit 7'
+[exit 7]

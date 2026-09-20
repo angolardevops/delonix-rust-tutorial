@@ -1,0 +1,2 @@
+$ systemd-run --user --scope -p Delegate=yes mc run pids -b bundle   # pids.max=16; o processo faz fork de 20
+/bin/sh: can't fork: Resource temporarily unavailable

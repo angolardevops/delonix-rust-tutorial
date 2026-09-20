@@ -1,0 +1,8 @@
+$ runc --version | head -1
+runc version 1.5.1
+$ runc run rc   # o MESMO bundle que o mc acabou de correr (+ mapeamentos de user ns)
+vem da layer 2
+motd
+passwd
+cwd=/tmp MSG=ola-da-imagem
+[exit 0]

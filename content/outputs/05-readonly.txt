@@ -1,0 +1,5 @@
+$ /home/walter/workspace/delonix-rust-tutorial/target/release/mc run ro -b /tmp/tmp.ALsNWnQIdz/b
+touch: /x: Read-only file system
+touch /x -> rc=1
+touch /tmp/x -> ok
+[exit 0]

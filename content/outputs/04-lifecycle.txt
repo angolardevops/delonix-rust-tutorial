@@ -1,0 +1,37 @@
+$ mc create life -b bundle
+[exit 0]
+$ mc state life
+{
+  "ociVersion": "1.0.2",
+  "id": "life",
+  "status": "created",
+  "pid": 1895416,
+  "bundle": "/tmp/tmp.ALsNWnQIdz/b"
+}
+$ mc start life
+[exit 0]
+$ mc list
+life                 running  1895416  /tmp/tmp.ALsNWnQIdz/b
+$ mc logs life
+arrancou
+$ mc create life -b bundle   # duplicado
+mc: container already exists: life
+[exit 5]
+$ mc delete life             # ainda vivo
+mc: container life is running, expected stopped (or use --force)
+[exit 5]
+$ mc kill life
+[exit 0]
+$ mc state life
+{
+  "ociVersion": "1.0.2",
+  "id": "life",
+  "status": "stopped",
+  "pid": 1895416,
+  "bundle": "/tmp/tmp.ALsNWnQIdz/b"
+}
+$ mc delete life
+[exit 0]
+$ mc state life
+mc: no such container: life
+[exit 4]

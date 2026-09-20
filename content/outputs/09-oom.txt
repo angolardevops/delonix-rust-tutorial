@@ -1,0 +1,3 @@
+$ systemd-run --user --scope -p Delegate=yes mc run oom -b bundle   # memory.max=32M; o processo enche a memória
+mc: container was OOM-killed
+[exit 137]

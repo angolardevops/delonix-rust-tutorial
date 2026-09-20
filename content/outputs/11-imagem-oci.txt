@@ -1,0 +1,20 @@
+$ find oci-layout -type f   # (digests abreviados)
+./blobs/sha256/1b56dc453876…
+./blobs/sha256/529ac0843a94…
+./blobs/sha256/ad51f984ce69…
+./blobs/sha256/d5fdbbdf2ff0…
+./index.json
+./oci-layout
+$ mc unpack layout bundle2
+[exit 0]
+$ ls bundle2/rootfs/etc   # 'removido-pela-layer-2' foi apagado pelo whiteout
+motd
+passwd
+$ jq -c .process bundle2/config.json
+{"terminal":false,"args":["/bin/sh","-c","cat /etc/motd; ls /etc; echo cwd=$(pwd) MSG=$MSG"],"env":["PATH=/bin","MSG=ola-da-imagem"],"cwd":"/tmp"}
+$ mc run img -b bundle2
+vem da layer 2
+motd
+passwd
+cwd=/tmp MSG=ola-da-imagem
+[exit 0]

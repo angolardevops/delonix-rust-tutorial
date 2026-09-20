@@ -1,0 +1,4 @@
+$ echo x >> blobs/sha256/<layer1>   # adulterar 1 byte
+$ mc unpack layout-adulterado bundle3
+mc: digest mismatch for sha256:<sha256>: expected <sha256>, got <sha256>
+[exit 1]

@@ -1,0 +1,3 @@
+$ /home/walter/workspace/delonix-rust-tutorial/target/release/mc run sc -b /tmp/tmp.ALsNWnQIdz/b
+mc: unsupported: linux.seccomp (no filter support)
+[exit 2]

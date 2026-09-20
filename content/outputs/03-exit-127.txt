@@ -1,0 +1,3 @@
+$ mc run n -b bundle   # binário inexistente
+mc: cannot exec "/bin/nope": ENOENT: No such file or directory
+[exit 127]

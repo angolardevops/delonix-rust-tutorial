@@ -1,0 +1,14 @@
+$ /home/walter/workspace/delonix-rust-tutorial/target/release/mc run demo -b /tmp/tmp.ALsNWnQIdz/b
+pid=1 host=minicontainer uid=0
+CapBnd:	00000000a80425fb
+fd
+full
+null
+random
+stderr
+stdin
+stdout
+tty
+urandom
+zero
+[exit 0]
