@@ -22,7 +22,7 @@ order: 0
 </section>
 
 <div class="stats">
-<div class="stat"><b>22</b><span>crates reais do motor estudados</span></div>
+<div class="stat"><b>22</b><span>crates do motor, em 5 camadas</span></div>
 <div class="stat"><b>22</b><span>testes do minicontainer (15 unit + 7 E2E)</span></div>
 <div class="stat"><b>0</b><span>daemons, 0 root — tudo rootless</span></div>
 <div class="stat"><b>OCI + CRI</b><span>a norma que o motor cumpre</span></div>

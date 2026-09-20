@@ -73,7 +73,7 @@ Precisa do `minicontainer` para ver o passo 4 a sério — é o que fazes a part
 
 ## Como o estado é organizado
 
-Sem daemon, **o estado vive em disco** (`DELONIX_ROOT`, por omissão em `~/.local/share/delonix`): um JSON por container, por volume, por rede — lidos e escritos com `flock` e escrita atómica. Isto tem consequências que o motor documenta e o `minicontainer` reproduz em pequeno:
+Sem daemon, **o estado vive em disco** (a raiz de estado, configurável por `DELONIX_ROOT`): um JSON por container, por volume, por rede — lidos e escritos com `flock` e escrita atómica. Isto tem consequências que o motor documenta e o `minicontainer` reproduz em pequeno:
 
 - Um processo pode morrer a meio: **o estado em disco pode mentir** (diz `Running` para um PID morto). Por isso existe `reconcile_status`, que confronta o ficheiro com a realidade ([`reconcile`](mc-ciclo-de-vida.html)).
 - Estado necessário para **reconstruir** o recurso tem de ser persistido, não só usado na criação. Já morderam três vezes: `-v` não persistido (um `start` voltava a correr **sem** os volumes, escrevendo no rootfs), `-p` em rede custom, e as redes adicionais.

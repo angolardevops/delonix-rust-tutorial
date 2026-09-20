@@ -109,7 +109,7 @@ Um ADR aceite ganha a qualquer opinião posterior; substitui-se **com outro ADR*
 
 ## Segurança
 
-O motor corre como o teu utilizador sobre input hostil (imagens, manifestos, nomes). Antes de tocares numa **fronteira de privilégio** (execução remota, SSH, *build* de imagens, montagens), relê os capítulos [12](mc-namespaces-rootfs.html) e [13](mc-cgroups-caps.html) e a checklist de [Projecto completo](projecto-completo.html#seguranca-habitos-nao-auditorias). Uma vulnerabilidade deve ser reportada de forma privada (`SECURITY.md` do repositório), não como issue público.
+O motor corre como o teu utilizador sobre input hostil (imagens, manifestos, nomes). Antes de tocares numa **fronteira de privilégio** (execução remota, SSH, *build* de imagens, montagens), relê os capítulos [12](mc-namespaces-rootfs.html) e [13](mc-cgroups-caps.html) e a checklist de [Projecto completo](projecto-completo.html#seguranca-habitos-nao-auditorias). Uma vulnerabilidade **não** se reporta como issue público: o `SECURITY.md` do repositório pede o *Private Vulnerability Reporting* do GitHub (separador **Security → Report a vulnerability**).
 
 ## Onde pedir ajuda
 
