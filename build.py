@@ -140,20 +140,25 @@ class Sectionizer(HTMLParser):
     def __init__(self):
         super().__init__()
         self.sections = []  # {a, h, x}
-        self.cur = {"a": "", "h": "", "x": []}
+        self.cur = {"a": "", "h": "", "x": [], "c": []}
         self.in_head = None
         self.skip = 0
+        self.pre = 0
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        if tag == "pre":
+            self.pre += 1
         if tag in ("h1", "h2", "h3"):
             self.flush()
             self.in_head = tag
-            self.cur = {"a": a.get("id", ""), "h": "", "x": []}
+            self.cur = {"a": a.get("id", ""), "h": "", "x": [], "c": []}
         if tag == "svg":
             self.skip += 1
 
     def handle_endtag(self, tag):
+        if tag == "pre":
+            self.pre -= 1
         if tag == self.in_head:
             self.in_head = None
         if tag == "svg":
@@ -165,12 +170,15 @@ class Sectionizer(HTMLParser):
         if self.in_head:
             self.cur["h"] += data
         else:
-            self.cur["x"].append(data)
+            # prosa e código em listas separadas: um bloco de código longo não pode comer o orçamento da prosa
+            self.cur["c" if self.pre else "x"].append(data)
 
     def flush(self):
-        text = re.sub(r"\s+", " ", " ".join(self.cur["x"])).strip()
+        prose = re.sub(r"\s+", " ", " ".join(self.cur["x"])).strip()
+        code = re.sub(r"\s+", " ", " ".join(self.cur["c"])).strip()
+        text = (prose[:1500] + " " + code[:500]).strip()
         if self.cur["h"] or text:
-            self.sections.append({"a": self.cur["a"], "h": self.cur["h"].strip().rstrip("¶#").strip(), "x": text[:1800]})
+            self.sections.append({"a": self.cur["a"], "h": self.cur["h"].strip().rstrip("¶#").strip(), "x": text})
 
 
 def sectionize(body_html: str):
